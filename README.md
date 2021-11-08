@@ -1,10 +1,15 @@
-# TheOutlet's Plugins
+# TheOutlet's Free Plugins
 
-External plugins to use in the OpenOSRS client. 
+External automation scripts to use in the OpenOSRS client. 
 - 
-These utility functions have been imported from Illumine's, and are based off his `i-utils`.
-These plugins do not meet Jagex's plugin standards and should be use with caution.
+A collection of free-to-use plugins created by the team at TheOutlet.
 
-Potential Additions:
-- 
-- Replace with MeteorLite API... maybe.
+**Developers:**
+- Cetti#0001
+
+
+CAUTION
+-
+Use these plugins at your own risk! TheOutlet is not responsible for any consequences that may arise while using these plugins.
+
+If you'd like to purchase premium plugins, you can join the discord at: https://discord.link/theoutlet
