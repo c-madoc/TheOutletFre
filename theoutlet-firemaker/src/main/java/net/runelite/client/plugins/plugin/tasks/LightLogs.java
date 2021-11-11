@@ -2,6 +2,7 @@ package net.runelite.client.plugins.plugin.tasks;
 
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ItemID;
+import net.runelite.api.Skill;
 import net.runelite.api.Tile;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
@@ -79,7 +80,9 @@ public class LightLogs extends Task {
         if (!game.localPlayer().isIdle()) {
             return;
         }
-        standingOnObject();
-        lightFire();
+        if (game.client.getRealSkillLevel(Skill.FIREMAKING) < FiremakerPlugin.taskConfig.stopAtLevel()) {
+            standingOnObject();
+            lightFire();
+        }
     }
 }

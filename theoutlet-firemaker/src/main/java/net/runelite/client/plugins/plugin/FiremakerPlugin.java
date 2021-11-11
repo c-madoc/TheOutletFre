@@ -29,7 +29,9 @@ import com.google.inject.Provides;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
+import net.runelite.api.Skill;
 import net.runelite.api.events.ConfigButtonClicked;
+import net.runelite.api.events.StatChanged;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.PluginDependency;
@@ -134,6 +136,16 @@ public class FiremakerPlugin extends iScript {
     }
 
     @Subscribe
+    private void onStatChanged(StatChanged e) {
+        if (e.getSkill().equals(Skill.FIREMAKING)) {
+            if (e.getLevel() >= taskConfig.stopAtLevel()){
+                log.info("Reached target! Shutting down.");
+                stop();
+            }
+        }
+    }
+
+                               @Subscribe
     private void onConfigButtonPressed(ConfigButtonClicked configButtonClicked) {
         if (!configButtonClicked.getGroup().equalsIgnoreCase("TOFiremaker")) {
             return;
