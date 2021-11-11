@@ -23,13 +23,12 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.runelite.client.plugins.varrocksmither;
+package net.runelite.client.plugins.plugin;
 
 import com.google.inject.Provides;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
-import net.runelite.api.ItemID;
 import net.runelite.api.events.ConfigButtonClicked;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -37,9 +36,10 @@ import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.iutils.iUtils;
 import net.runelite.client.plugins.iutils.scripts.iScript;
-import net.runelite.client.plugins.iutils.scripts.iScript;
-import net.runelite.client.plugins.varrocksmither.tasks.Banking;
-import net.runelite.client.plugins.varrocksmither.tasks.SmithItems;
+import net.runelite.client.plugins.plugin.tasks.Banking;
+import net.runelite.client.plugins.plugin.tasks.GoToLocation;
+import net.runelite.client.plugins.plugin.tasks.LightLogs;
+import net.runelite.client.plugins.plugin.tasks.UnnoteLogs;
 import net.runelite.client.ui.overlay.OverlayManager;
 import org.pf4j.Extension;
 
@@ -50,36 +50,32 @@ import java.time.Instant;
 @Extension
 @PluginDependency(iUtils.class)
 @PluginDescriptor(
-        name = "Varrock Smither",
+        name = "TheOutlet: Firemaker",
         enabledByDefault = false,
-        description = "Smiths at the Varrock anvils",
-        tags = {"smith", "cetti"}
+        description = "Lights fires",
+        tags = {"outlet", "firemake", "fm"}
 )
 @Slf4j
-public class VarrockSmitherPlugin extends iScript {
+public class FiremakerPlugin extends iScript {
 
     @Inject private Client client;
-    @Inject private VarrockSmitherConfig config;
-    public static VarrockSmitherConfig taskConfig;
+    @Inject private FiremakerConfig config;
+    public static FiremakerConfig taskConfig;
     @Inject private OverlayManager overlayManager;
-    @Inject private VarrockSmitherOverlay overlay;
+    @Inject private FiremakerOverlay overlay;
     @Inject private ConfigManager configManager;
 
     private static TaskSet tasks = new TaskSet();
 
+    public static boolean lightLogs;
+    public static boolean lightSpotOne;
+
     Instant botTimer;
     public static String status = "starting...";
 
-
-
     @Provides
-    VarrockSmitherConfig provideConfig(ConfigManager configManager) {
-        return configManager.getConfig(VarrockSmitherConfig.class);
-    }
-
-    @Override
-    protected void startUp() {
-        configManager.setConfiguration("bank", "bankPinKeyboard", true);
+    FiremakerConfig provideConfig(ConfigManager configManager) {
+        return configManager.getConfig(FiremakerConfig.class);
     }
 
     @Override
@@ -89,7 +85,7 @@ public class VarrockSmitherPlugin extends iScript {
 
     @Override
     public void onStart() {
-        log.info("Starting Varrock Smither.");
+        log.info("Starting TOFiremaker.");
         taskConfig = config;
 
         if (client != null && game.localPlayer() != null && client.getGameState() == GameState.LOGGED_IN) {
@@ -104,7 +100,7 @@ public class VarrockSmitherPlugin extends iScript {
 
     @Override
     public void onStop() {
-        log.info("Stopping Varrock Smither.");
+        log.info("Stopping TOFiremaker.");
         overlayManager.remove(overlay);
         botTimer = null;
         tasks.clear();
@@ -130,14 +126,16 @@ public class VarrockSmitherPlugin extends iScript {
     private void loadTasks() {
         tasks.clear();
         tasks.addAll(
-                injector.getInstance(SmithItems.class),
+                injector.getInstance(LightLogs.class),
+                injector.getInstance(GoToLocation.class),
+                injector.getInstance(UnnoteLogs.class),
                 injector.getInstance(Banking.class)
         );
     }
 
     @Subscribe
     private void onConfigButtonPressed(ConfigButtonClicked configButtonClicked) {
-        if (!configButtonClicked.getGroup().equalsIgnoreCase("VarrockSmither")) {
+        if (!configButtonClicked.getGroup().equalsIgnoreCase("TOFiremaker")) {
             return;
         }
 

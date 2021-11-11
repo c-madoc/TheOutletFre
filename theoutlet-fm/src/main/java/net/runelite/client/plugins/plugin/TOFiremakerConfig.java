@@ -23,66 +23,52 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.runelite.client.plugins.varrocksmither;
+package net.runelite.client.plugins.plugin;
 
 import net.runelite.client.config.*;
-import net.runelite.client.plugins.varrocksmither.data.Variables;
+import net.runelite.client.plugins.plugin.data.Variables;
 
-@ConfigGroup("VarrockSmither")
-public interface VarrockSmitherConfig extends Config {
+@ConfigGroup("TOFiremaker")
+public interface TOFiremakerConfig extends Config {
 
-    /*
-    different styles for the config menu
-    Create Sections for each Item thats going to be in the config menu
-    - Section
-    -- Item
-    -- Item
-    */
-
-    // Section
-    @ConfigSection(
-            position = 0,
-            keyName = "mainConfig",
-            name = "Main Config",
-            description = ""
+    @ConfigItem(
+            position = 10,
+            keyName = "logType",
+            name = "Log",
+            description = "The log to light."
     )
-    String mainConfig = "Main Config";
+    default Variables.Log logType() {return Variables.Log.LOGS;}
+
+    @ConfigItem(
+            position = 10,
+            keyName = "location",
+            name = "Location",
+            description = "The location to light."
+    )
+    default Variables.LightLocation location() {return Variables.LightLocation.GE_N;}
 
     @ConfigItem(
             position = 20,
-            keyName = "barType",
-            name = "Bar Type",
-            description = "Select the type of bar to use.",
-            section = mainConfig
+            keyName = "stopAtLevel",
+            name = "Level Stop",
+            description = "Stop at a certain level."
     )
-    default Variables.Bar barType() {return Variables.Bar.RUNITE;}
+    default int stopAtLevel() {return 99;}
 
     @ConfigItem(
             position = 30,
-            keyName = "smithItem",
-            name = "Smith Item",
-            description = "Select the type of item to smith.",
-            section = mainConfig
+            keyName = "useNoted",
+            name = "Note logs",
+            description = "Fastest way to get unnoted logs."
     )
-    default Variables.SmithItem smithItem() {return Variables.SmithItem.PLATEBODY;}
-
-    @ConfigItem(
-            position = 40,
-            keyName = "useStamina",
-            name = "Use Stamina",
-            description = "Use Stamina on Low Energy?",
-            section = mainConfig
-    )
-    default boolean useStamina() {return true;}
-
+    default boolean useNoted() {return true;}
 
     // start / stop
     @ConfigItem(
             position = 100,
             keyName = "startButton",
             name = "Start/Stop",
-            description = "Test button that changes variable value",
-            section = mainConfig
+            description = "Test button that changes variable value"
     )
     default Button startButton() {
         return new Button();

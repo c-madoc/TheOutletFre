@@ -23,7 +23,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.runelite.client.plugins.varrocksmither;
+package net.runelite.client.plugins.geseller;
 
 import com.google.inject.Provides;
 import lombok.extern.slf4j.Slf4j;
@@ -35,11 +35,10 @@ import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.plugins.geseller.tasks.SellItems;
 import net.runelite.client.plugins.iutils.iUtils;
 import net.runelite.client.plugins.iutils.scripts.iScript;
 import net.runelite.client.plugins.iutils.scripts.iScript;
-import net.runelite.client.plugins.varrocksmither.tasks.Banking;
-import net.runelite.client.plugins.varrocksmither.tasks.SmithItems;
 import net.runelite.client.ui.overlay.OverlayManager;
 import org.pf4j.Extension;
 
@@ -50,19 +49,19 @@ import java.time.Instant;
 @Extension
 @PluginDependency(iUtils.class)
 @PluginDescriptor(
-        name = "Varrock Smither",
+        name = "GE Seller",
         enabledByDefault = false,
-        description = "Smiths at the Varrock anvils",
-        tags = {"smith", "cetti"}
+        description = "Sells all items in your inventory to the GE",
+        tags = {"outlet", "ge", "seller"}
 )
 @Slf4j
-public class VarrockSmitherPlugin extends iScript {
+public class GESellerPlugin extends iScript {
 
     @Inject private Client client;
-    @Inject private VarrockSmitherConfig config;
-    public static VarrockSmitherConfig taskConfig;
+    @Inject private GESellerConfig config;
+    public static GESellerConfig taskConfig;
     @Inject private OverlayManager overlayManager;
-    @Inject private VarrockSmitherOverlay overlay;
+    @Inject private GESellerOverlay overlay;
     @Inject private ConfigManager configManager;
 
     private static TaskSet tasks = new TaskSet();
@@ -70,11 +69,9 @@ public class VarrockSmitherPlugin extends iScript {
     Instant botTimer;
     public static String status = "starting...";
 
-
-
     @Provides
-    VarrockSmitherConfig provideConfig(ConfigManager configManager) {
-        return configManager.getConfig(VarrockSmitherConfig.class);
+    GESellerConfig provideConfig(ConfigManager configManager) {
+        return configManager.getConfig(GESellerConfig.class);
     }
 
     @Override
@@ -89,7 +86,7 @@ public class VarrockSmitherPlugin extends iScript {
 
     @Override
     public void onStart() {
-        log.info("Starting Varrock Smither.");
+        log.info("Starting GE Seller.");
         taskConfig = config;
 
         if (client != null && game.localPlayer() != null && client.getGameState() == GameState.LOGGED_IN) {
@@ -104,7 +101,7 @@ public class VarrockSmitherPlugin extends iScript {
 
     @Override
     public void onStop() {
-        log.info("Stopping Varrock Smither.");
+        log.info("Stopping GE Seller.");
         overlayManager.remove(overlay);
         botTimer = null;
         tasks.clear();
@@ -130,14 +127,13 @@ public class VarrockSmitherPlugin extends iScript {
     private void loadTasks() {
         tasks.clear();
         tasks.addAll(
-                injector.getInstance(SmithItems.class),
-                injector.getInstance(Banking.class)
+                injector.getInstance(SellItems.class)
         );
     }
 
     @Subscribe
     private void onConfigButtonPressed(ConfigButtonClicked configButtonClicked) {
-        if (!configButtonClicked.getGroup().equalsIgnoreCase("VarrockSmither")) {
+        if (!configButtonClicked.getGroup().equalsIgnoreCase("GESeller")) {
             return;
         }
 

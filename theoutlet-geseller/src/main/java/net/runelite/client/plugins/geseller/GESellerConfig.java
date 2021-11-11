@@ -23,13 +23,13 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.runelite.client.plugins.varrocksmither;
+package net.runelite.client.plugins.geseller;
 
 import net.runelite.client.config.*;
 import net.runelite.client.plugins.varrocksmither.data.Variables;
 
-@ConfigGroup("VarrockSmither")
-public interface VarrockSmitherConfig extends Config {
+@ConfigGroup("GESeller")
+public interface GESellerConfig extends Config {
 
     /*
     different styles for the config menu

@@ -23,13 +23,12 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.runelite.client.plugins.varrocksmither;
+package net.runelite.client.plugins.tutorialisland;
 
 import com.google.inject.Provides;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
-import net.runelite.api.ItemID;
 import net.runelite.api.events.ConfigButtonClicked;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -37,9 +36,8 @@ import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.iutils.iUtils;
 import net.runelite.client.plugins.iutils.scripts.iScript;
-import net.runelite.client.plugins.iutils.scripts.iScript;
-import net.runelite.client.plugins.varrocksmither.tasks.Banking;
-import net.runelite.client.plugins.varrocksmither.tasks.SmithItems;
+import net.runelite.client.plugins.tutorialisland.tasks.RunGE;
+import net.runelite.client.plugins.tutorialisland.tasks.TutorialIsland;
 import net.runelite.client.ui.overlay.OverlayManager;
 import org.pf4j.Extension;
 
@@ -50,19 +48,19 @@ import java.time.Instant;
 @Extension
 @PluginDependency(iUtils.class)
 @PluginDescriptor(
-        name = "Varrock Smither",
+        name = "Tutorial Island",
         enabledByDefault = false,
-        description = "Smiths at the Varrock anvils",
-        tags = {"smith", "cetti"}
+        description = "Completes Tutorial Island",
+        tags = {"tutorial island", "cetti", "the plug", "free"}
 )
 @Slf4j
-public class VarrockSmitherPlugin extends iScript {
+public class TutorialIslandPlugin extends iScript {
 
     @Inject private Client client;
-    @Inject private VarrockSmitherConfig config;
-    public static VarrockSmitherConfig taskConfig;
+    @Inject private TutorialIslandConfig config;
+    public static TutorialIslandConfig taskConfig;
     @Inject private OverlayManager overlayManager;
-    @Inject private VarrockSmitherOverlay overlay;
+    @Inject private TutorialIslandOverlay overlay;
     @Inject private ConfigManager configManager;
 
     private static TaskSet tasks = new TaskSet();
@@ -70,11 +68,28 @@ public class VarrockSmitherPlugin extends iScript {
     Instant botTimer;
     public static String status = "starting...";
 
+    public enum GameMode {
+        REGULAR("Regular"),
+        IRONMAN("Ironman"),
+        HARDCORE_IRONMAN("Hardcore Ironman"),
+        ULTIMATE_IRONMAN("Ultimate Ironman");
 
+        public final String name;
+
+        @Override
+        public String toString()
+        {
+            return name;
+        }
+
+        GameMode(String name) {
+            this.name = name;
+        }
+    }
 
     @Provides
-    VarrockSmitherConfig provideConfig(ConfigManager configManager) {
-        return configManager.getConfig(VarrockSmitherConfig.class);
+    TutorialIslandConfig provideConfig(ConfigManager configManager) {
+        return configManager.getConfig(TutorialIslandConfig.class);
     }
 
     @Override
@@ -89,7 +104,7 @@ public class VarrockSmitherPlugin extends iScript {
 
     @Override
     public void onStart() {
-        log.info("Starting Varrock Smither.");
+        log.info("Starting Tutorial Island.");
         taskConfig = config;
 
         if (client != null && game.localPlayer() != null && client.getGameState() == GameState.LOGGED_IN) {
@@ -104,7 +119,7 @@ public class VarrockSmitherPlugin extends iScript {
 
     @Override
     public void onStop() {
-        log.info("Stopping Varrock Smither.");
+        log.info("Stopping Tutorial Island.");
         overlayManager.remove(overlay);
         botTimer = null;
         tasks.clear();
@@ -119,7 +134,7 @@ public class VarrockSmitherPlugin extends iScript {
                 status = task.getTaskDescription();
                 task.run();
             } else {
-                status = "Cannot continue - Stopping.";
+                status = "Tutorial Island Completed!";
                 game.tick(5);
                 log.info(status);
                 stop();
@@ -130,14 +145,14 @@ public class VarrockSmitherPlugin extends iScript {
     private void loadTasks() {
         tasks.clear();
         tasks.addAll(
-                injector.getInstance(SmithItems.class),
-                injector.getInstance(Banking.class)
+                injector.getInstance(TutorialIsland.class),
+                injector.getInstance(RunGE.class)
         );
     }
 
     @Subscribe
     private void onConfigButtonPressed(ConfigButtonClicked configButtonClicked) {
-        if (!configButtonClicked.getGroup().equalsIgnoreCase("VarrockSmither")) {
+        if (!configButtonClicked.getGroup().equalsIgnoreCase("TutorialIsland")) {
             return;
         }
 

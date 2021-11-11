@@ -23,13 +23,12 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.runelite.client.plugins.varrocksmither;
+package net.runelite.client.plugins.tutorialisland;
 
 import net.runelite.client.config.*;
-import net.runelite.client.plugins.varrocksmither.data.Variables;
 
-@ConfigGroup("VarrockSmither")
-public interface VarrockSmitherConfig extends Config {
+@ConfigGroup("TutorialIsland")
+public interface TutorialIslandConfig extends Config {
 
     /*
     different styles for the config menu
@@ -49,31 +48,78 @@ public interface VarrockSmitherConfig extends Config {
     String mainConfig = "Main Config";
 
     @ConfigItem(
-            position = 20,
-            keyName = "barType",
-            name = "Bar Type",
-            description = "Select the type of bar to use.",
+            position = 10,
+            keyName = "userName",
+            name = "Username",
+            description = "Enter a username, or blank for random.",
             section = mainConfig
     )
-    default Variables.Bar barType() {return Variables.Bar.RUNITE;}
+    default String userName() {return "";}
+
+
+    @ConfigItem(
+            position = 20,
+            keyName = "gameMode",
+            name = "Game Mode",
+            description = "Select a game mode.",
+            section = mainConfig
+    )
+    default TutorialIslandPlugin.GameMode gameMode() {return TutorialIslandPlugin.GameMode.REGULAR;}
 
     @ConfigItem(
             position = 30,
-            keyName = "smithItem",
-            name = "Smith Item",
-            description = "Select the type of item to smith.",
+            keyName = "bankPin",
+            name = "Required Bank PIN",
+            description = "Enter a bank pin. Must be used for Ironmen.",
+            hidden = true,
+
+            unhide = "gameMode",
+            unhideValue = "Ironman || Hardcore Ironman || Ultimate Ironman",
             section = mainConfig
     )
-    default Variables.SmithItem smithItem() {return Variables.SmithItem.PLATEBODY;}
+    default String bankPin() {return "0420";}
+
+    @ConfigItem(
+            position = 100,
+            keyName = "runGE",
+            name = "Run to GE",
+            description = "Run to GE after completion?",
+            section = mainConfig
+    )
+    default boolean runGE() {return false;}
 
     @ConfigItem(
             position = 40,
-            keyName = "useStamina",
-            name = "Use Stamina",
-            description = "Use Stamina on Low Energy?",
+            keyName = "customLook",
+            name = "Custom Look",
+            description = "Enable for customization features.",
             section = mainConfig
     )
-    default boolean useStamina() {return true;}
+    default boolean customLook() {return false;}
+
+    @ConfigItem(
+            position = 41,
+            keyName = "setFemale",
+            name = "Start as Female",
+            description = "Start as Female.",
+            hidden = true,
+            unhide = "customLook",
+            unhideValue = "true",
+            section = mainConfig
+    )
+    default boolean setFemale() {return false;}
+
+    @ConfigItem(
+            position = 42,
+            keyName = "randomAppearance",
+            name = "Set Random Appearance",
+            description = "Set Random Appearance.",
+            hidden = true,
+            unhide = "customLook",
+            unhideValue = "true",
+            section = mainConfig
+    )
+    default boolean randomAppearance() {return false;}
 
 
     // start / stop
