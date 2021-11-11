@@ -25,8 +25,8 @@
 
 version = "1.1.0"
 
-project.extra["PluginName"] = "c-varrock-smither"
-project.extra["PluginDescription"] = "Cetti's Varrock Smither"
+project.extra["PluginName"] = "theoutlet-varrocksmither"
+project.extra["PluginDescription"] = "TheOutletVarrockSmither"
 
 dependencies {
     compileOnly(group = "com.openosrs.externals", name = "iutils", version = "4.6.7")
