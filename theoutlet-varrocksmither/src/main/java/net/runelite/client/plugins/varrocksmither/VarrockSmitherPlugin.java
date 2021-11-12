@@ -50,10 +50,10 @@ import java.time.Instant;
 @Extension
 @PluginDependency(iUtils.class)
 @PluginDescriptor(
-        name = "Varrock Smither",
+        name = "TheOutlet: Varrock Smither",
         enabledByDefault = false,
         description = "Smiths at the Varrock anvils",
-        tags = {"smith", "cetti"}
+        tags = {"theoutlet", "smith", "varrock"}
 )
 @Slf4j
 public class VarrockSmitherPlugin extends iScript {

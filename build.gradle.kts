@@ -117,6 +117,16 @@ subprojects {
             }
         }
 
+        withType<Jar> {
+            doLast {
+                copy {
+                    from("./build/libs/")
+                    into("../release/")
+                }
+            }
+        }
+
+
         withType<AbstractArchiveTask> {
             isPreserveFileTimestamps = false
             isReproducibleFileOrder = true
@@ -124,4 +134,5 @@ subprojects {
             fileMode = 420
         }
     }
+
 }
