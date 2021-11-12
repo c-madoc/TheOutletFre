@@ -103,13 +103,9 @@ subprojects {
             options.encoding = "UTF-8"
         }
 
-        withType<Jar> {
-            doLast {
-                copy {
-                    from("./build/libs/")
-                    into("../release/")
-                }
-            }
+        register<Copy>("copyDeps") {
+            into("./build/deps/")
+            from(configurations["runtimeClasspath"])
         }
 
         withType<Jar> {
@@ -121,16 +117,22 @@ subprojects {
             }
         }
 
+        withType<Jar> {
+            doLast {
+                copy {
+                    from("./build/libs/")
+                    into("../release/")
+                }
+            }
+        }
+
+
         withType<AbstractArchiveTask> {
             isPreserveFileTimestamps = false
             isReproducibleFileOrder = true
             dirMode = 493
             fileMode = 420
         }
-
-        register<Copy>("copyDeps") {
-            into("./build/deps/")
-            from(configurations["runtimeClasspath"])
-        }
     }
+
 }
