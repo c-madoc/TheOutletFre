@@ -29,7 +29,7 @@ project.extra["PluginName"] = "theoutlet-firemaker"
 project.extra["PluginDescription"] = "TheOutletFiremaker"
 
 dependencies {
-    compileOnly(group = "com.openosrs.externals", name = "iutils", version = "4.6.3+")
+    compileOnly(group = "com.openosrs.externals", name = "iutils", version = "4.6.7+")
 }
 
 tasks {
