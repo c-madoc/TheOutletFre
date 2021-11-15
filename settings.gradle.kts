@@ -26,7 +26,6 @@
 rootProject.name = "TheOutletFree"
 
 include(":theoutlet-varrocksmither")
-//include(":theoutlet-geseller")
 include(":theoutlet-firemaker")
 
 
